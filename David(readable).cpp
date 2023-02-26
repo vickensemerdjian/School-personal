@@ -54,39 +54,36 @@ bool RemoteControlCodeEnabled = true;
   
 // Allows for easier use of the VEX Library
 using namespace vex;
-void Walter (){
- if(Controller1.ButtonUp.pressing()){
+void Walter (){ //allows controlling the arm with the controller buttons
+ if(Controller1.ButtonUp.pressing()){ 
     foreArm.spin(forward);
   }
   else if(Controller1.ButtonDown.pressing()){
     foreArm.spin(reverse);
   }
-  else if(!Controller1.ButtonUp.pressing()){
+  else if(!Controller1.ButtonDown.pressing() && !Controller1.ButtonUp.pressing()){ //holds the arm in place when no buttons are pressed
     foreArm.setStopping(hold);
   }
   else{
-    foreArm.stop();
+    foreArm.stop(); //stops the arm motor entirely when no buttons are pressed
   }
 }
 
 void Hubert (){
-  if (Controller1.ButtonL1.pressing()){
+  if (Controller1.ButtonL1.pressing()){ //allows controlling the bottom motor with the controller buttons
     Bottom.spin(forward);
-  }
-  if(!Controller1.ButtonL1.pressing()){
-    Bottom.setStopping(hold);
   }
   else if(Controller1.ButtonL2.pressing()){
     Bottom.spin(reverse);
   }
-  else if(!Controller1.ButtonL2.pressing()){ 
-    Bottom.setStopping(hold);
+  else if(!Controller1.ButtonL1.pressing() && !Controller1.ButtonL2.pressing){  //holds the bottom motor in place when no buttons are pressed
+    Bottom.setStopping(hold); 
   }
 
 }
 
 void Stuart (){
-  if (Controller1.ButtonA.pressing()){
+  if (Controller1.ButtonA.pressing()){ //allows controlling the hand with the controller buttons
     Hand.setPosition(-25,degrees);
   }
   else if(Controller1.ButtonY.pressing()){
@@ -96,10 +93,10 @@ void Stuart (){
 }
 
 int main() {
-  foreArm.setVelocity(10,percent);
+  foreArm.setVelocity(10,percent); //sets the velocity of the arm and bottom motor
    Bottom.setVelocity(15,percent);
-while (1==1){
- Walter();
+while (1==1){ //allows the robot to run continuously
+ Walter(); //calls the functions
  Hubert();
  Stuart();
 }
