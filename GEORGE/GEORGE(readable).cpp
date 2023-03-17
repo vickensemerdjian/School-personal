@@ -31,13 +31,15 @@ servo BillGate = servo(Brain.ThreeWirePort.A);
 motor OnlyMotor = motor(PORT10, ratio18_1, true);
 
 optical AllSeeing = optical(PORT21);
+servo FloodGate = servo(Brain.ThreeWirePort.B);
+limit LimitSwitch = limit(Brain.ThreeWirePort.C);
 #pragma endregion VEXcode Generated Robot Configuration
 
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
-/*    Author:       {author}                                                  */
-/*    Created:      {date}                                                    */
+/*    Author:       {Chris Morales, Vicken Semerdjian}                        */
+/*    Created:      {March 2023}                                              */
 /*    Description:  V5 project                                                */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
@@ -50,41 +52,48 @@ using namespace vex;
 
  void EyeBall(){
    AllSeeing.setLight(ledState::on);
-   AllSeeing.setLightPower(75,percent);
-   AllSeeing.hue();
+   AllSeeing.setLightPower(50,percent);
  }
 int SortState = 0;
  void SortingStuff(){
-   if((AllSeeing.hue()>37)&&(AllSeeing.hue()<42)){        //Metal ball (41)
-      Brain.Screen.print(AllSeeing.hue());
-     BillGate.setPosition(-50,degrees);
-     SortState=1;
 
-   }
-   else if((AllSeeing.hue()>42)&&(AllSeeing.hue()<45)){ //white ball (44)
-      Brain.Screen.print(AllSeeing.hue());
+    if (LimitSwitch.pressing()) {         //Metal Ball
+      BillGate.setPosition(-48,degrees);
+     SortState=1;
+     AllSeeing.setLight(ledState::off);
+     FloodGate.setPosition(10,degrees);
+     wait(0.5,seconds);
+  }
+  
+   else if((AllSeeing.hue()>39)&&(AllSeeing.hue()<43)){ //white ball (44)
+     Brain.Screen.print(AllSeeing.hue());
      BillGate.setPosition(-50,degrees);
      SortState=1;
+     FloodGate.setPosition(50,degrees);
    }
     else if((AllSeeing.hue()>28)&&(AllSeeing.hue()<34)){ //wood ball(32)
       Brain.Screen.print(AllSeeing.hue());
-      
      BillGate.setPosition(-50,degrees);
      SortState=1;
+      FloodGate.setPosition(19,degrees);
    }
-
-  // else{
-   //  SortState=0;
- //  }
  }
+   
+//void PressFunction(){
+
+
+
+
+
  
 
   void Turnstile(){
-    
-    OnlyMotor.spinFor(reverse,0.2,turns);
+  //  OnlyMotor.spinFor(reverse,0.3,turns);
+    OnlyMotor.setVelocity(2,percent);
+    OnlyMotor.spin(reverse);
 
-    wait(.5,seconds);
-    OnlyMotor.stop();
+   // wait(.5,seconds);
+  //  OnlyMotor.stop();
   }
 int main() {
 BillGate.setPosition(50,degrees);
